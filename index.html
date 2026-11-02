@@ -278,6 +278,7 @@ sqlite3 "$DB" "select category, count(*) from leads group by category"</code></p
   <div class="code"><button type="button" class="copy">Копировать</button><pre><code>sudo systemctl disable --now monitor_v33 lead_detector_bot_v33 admin_bot_v33 watchdog_v33.timer
 sudo systemctl enable --now monitor_v3 lead_detector_bot_v3 admin_bot_v3 watchdog_v3.timer</code></pre></div>
   <div class="note warn"><b>Никогда не запускать два монитора</b>monitor_v3 и monitor_v33 на одной сессии одновременно — Telegram разлогинит оба и сессию придётся создавать заново. Юниты v33 сами останавливают v3 (<code>Conflicts=</code>), но порядок всё равно соблюдаем.</div>
+  <div class="note warn" style="margin-top:10px"><b>Старый сервер не трогаем</b>До 1 ноября боты работали на другом сервере (пользователь <code>saa</code>). Там остались юниты <code>*_v3</code> и копия сессии: ничего на нём не запускать, иначе сессия на рабочем сервере слетит.</div>
 </section>
 
 <section id="clients">
