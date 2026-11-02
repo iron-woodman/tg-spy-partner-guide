@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Запуск v33 и воронки продаж</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=Unbounded:wght@500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* Инструкция-справочник: узкая колонка текста, слева липкое оглавление, шаги — нумерованные карточки с чекбоксами */
+  --bg: #f4f6f7;
+  --surface: #ffffff;
+  --ink: #16202a;
+  --muted: #5b6875;
+  --line: #d9dfe4;
+  --accent: #1d5fa8;
+  --accent-soft: #e3edf8;
+  --ok: #1f7a4d;
+  --ok-soft: #e1f2e8;
+  --warn: #9a5b00;
+  --warn-soft: #fbefd9;
+  --font-display: "Unbounded", "Golos Text", system-ui, sans-serif;
+  --font-body: "Golos Text", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #11161b; --surface: #19212a; --ink: #e6ebef; --muted: #9aa7b3; --line: #2c3743;
+    --accent: #7fb2ec; --accent-soft: #1c2b3d; --ok: #6fd19b; --ok-soft: #173126;
+    --warn: #f0b75c; --warn-soft: #33270f; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #11161b; --surface: #19212a; --ink: #e6ebef; --muted: #9aa7b3; --line: #2c3743;
+  --accent: #7fb2ec; --accent-soft: #1c2b3d; --ok: #6fd19b; --ok-soft: #173126;
+  --warn: #f0b75c; --warn-soft: #33270f; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--bg); color: var(--ink); font: 17px/1.6 var(--font-body); }
+a { color: var(--accent); }
+a:focus-visible, input:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+code, .mono { font-family: var(--font-mono); font-size: 0.88em; background: var(--accent-soft); padding: 1px 6px; border-radius: 4px; overflow-wrap: anywhere; }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 32px 20px 80px; display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 48px; }
+nav { position: sticky; top: 24px; align-self: start; font-size: 15px; }
+nav ol { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px; counter-reset: n; }
+nav li { counter-increment: n; }
+nav a { text-decoration: none; color: var(--muted); display: flex; gap: 8px; }
+nav a::before { content: counter(n, decimal-leading-zero); font-family: var(--font-mono); color: var(--accent); }
+nav a:hover { color: var(--ink); }
+main { max-width: 720px; display: flex; flex-direction: column; gap: 56px; }
+header { display: flex; flex-direction: column; gap: 12px; }
+.kicker { font-family: var(--font-mono); font-size: 13px; color: var(--muted); letter-spacing: 0.04em; }
+h1 { font-family: var(--font-display); font-weight: 700; font-size: 34px; line-height: 1.2; margin: 0; text-wrap: balance; }
+h2 { font-family: var(--font-display); font-weight: 500; font-size: 23px; line-height: 1.3; margin: 0 0 16px; text-wrap: balance; }
+h3 { font-size: 18px; margin: 0 0 6px; }
+p { margin: 0 0 12px; }
+section > p:last-child { margin-bottom: 0; }
+.lead { font-size: 19px; color: var(--muted); }
+.facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.fact { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+.fact b { display: block; font-family: var(--font-display); font-weight: 500; font-size: 22px; font-variant-numeric: tabular-nums; }
+.fact span { font-size: 14px; color: var(--muted); }
+.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 15px; }
+th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-weight: 600; color: var(--muted); font-size: 13px; text-transform: uppercase; letter-spacing: 0.04em; }
+tr:last-child td { border-bottom: none; }
+td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.compare { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+.compare > div { min-width: 0; }
+.compare.stack { grid-template-columns: minmax(0, 1fr); }
+.compare > div { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; }
+.compare ul { margin: 0; padding-left: 18px; }
+.compare .now { border-top: 3px solid var(--accent); }
+.compare .was { border-top: 3px solid var(--line); color: var(--muted); }
+.steps { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; counter-reset: s; }
+.steps li { counter-increment: s; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px 14px 56px; position: relative; }
+.steps li::before { content: counter(s); position: absolute; left: 16px; top: 13px; width: 26px; height: 26px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font: 600 14px/26px var(--font-mono); text-align: center; }
+.steps label { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; }
+.steps input { margin-top: 6px; width: 17px; height: 17px; accent-color: var(--ok); flex: none; }
+.steps input:checked + span { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--line); }
+.steps .sub { display: block; font-size: 15px; color: var(--muted); margin-top: 4px; }
+.note { border-radius: 10px; padding: 14px 16px; font-size: 15.5px; }
+.note.warn { background: var(--warn-soft); border-left: 4px solid var(--warn); }
+.note.ok { background: var(--ok-soft); border-left: 4px solid var(--ok); }
+.note b:first-child { display: block; margin-bottom: 2px; }
+.pills { display: flex; flex-wrap: wrap; gap: 6px; }
+.pill { font-size: 13px; font-weight: 600; padding: 3px 10px; border-radius: 999px; border: 1px solid transparent; }
+.p-sent { background: var(--surface); border-color: var(--line); }
+.p-view { background: #ededed; color: #333; }
+.p-call { background: #ddebf7; color: #163a5e; }
+.p-trial { background: #ffeb9c; color: #5a4300; }
+.p-client { background: #c6efce; color: #14532d; }
+.p-renew { background: #ffc7ce; color: #7a1020; }
+.p-no { background: #d9d9d9; color: #333; }
+.week { display: grid; grid-template-columns: 110px 1fr; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); overflow: hidden; }
+.week div { padding: 10px 14px; border-bottom: 1px solid var(--line); }
+.week div:nth-child(odd) { font-weight: 600; background: var(--accent-soft); }
+.week div:nth-last-child(-n+2) { border-bottom: none; }
+details { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 16px; }
+details + details { margin-top: 8px; }
+summary { cursor: pointer; font-weight: 600; }
+details p { margin: 8px 0 0; color: var(--muted); }
+.code { position: relative; margin: 0 0 12px; }
+.code pre { margin: 0; background: #0f1720; color: #dfe7ee; border-radius: 10px; padding: 40px 18px 16px; overflow-x: auto; font-size: 14px; line-height: 1.55; }
+.code pre code { background: none; padding: 0; font-size: inherit; color: inherit; overflow-wrap: normal; }
+.code .copy { position: absolute; top: 8px; right: 8px; font: 600 12px var(--font-body); padding: 4px 10px; border-radius: 6px; border: 1px solid #3a4756; background: #1b2633; color: #dfe7ee; cursor: pointer; }
+.code .copy:hover { background: #26344a; }
+.progress { font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; }
+@media (max-width: 860px) {
+  .wrap { grid-template-columns: 1fr; gap: 24px; }
+  nav { position: static; }
+  nav ol { flex-direction: row; flex-wrap: wrap; gap: 6px 14px; }
+}
+@media (max-width: 560px) {
+  .facts, .compare { grid-template-columns: 1fr; }
+  h1 { font-size: 27px; }
+  .week { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav aria-label="Оглавление">
+  <ol>
+    <li><a href="#why">Что меняем</a></li>
+    <li><a href="#bot">Что нового в v33</a></li>
+    <li><a href="#launch">Запуск по шагам</a></li>
+    <li><a href="#deploy">Деплой v33</a></li>
+    <li><a href="#clients">Подключение клиента</a></li>
+    <li><a href="#sheet">Google-таблица</a></li>
+    <li><a href="#rhythm">Неделя</a></li>
+    <li><a href="#faq">Если что-то не так</a></li>
+  </ol>
+</nav>
+
+<main>
+<header>
+  <div class="kicker">ДЛЯ НАПАРНИКА · НОЯБРЬ 2026</div>
+  <h1>Переходим на v33 и ведём продажи в таблице</h1>
+  <p class="lead">Бот сам раскладывает заявки по каналам клиентов, ручная пересылка уходит. Твоя зона: качество заявок, подключение клиентов, учёт мест и оплат.</p>
+</header>
+
+<section id="why">
+  <h2>Что меняем и зачем</h2>
+  <p>Цель: с 4 клиентов дорасти до 10–15 к февралю 2027, только в Москве. Сейчас всё держится на ручной пересылке, а заявки нигде не сохраняются, поэтому нам нечего показать новым клиентам и нечем удержать старых.</p>
+  <div class="facts">
+    <div class="fact"><b>3 места</b><span>максимум подписчиков в канале одной ниши</span></div>
+    <div class="fact"><b>5 ниш</b><span>юрист, ремонт, клининг, репетитор и ещё одна</span></div>
+    <div class="fact"><b>15 мест</b><span>всего, это и есть цель</span></div>
+  </div>
+  <p style="margin-top:16px">Цены с этого момента:</p>
+  <div class="table-wrap">
+    <table>
+      <tr><th>Ниша</th><th>Месяц</th><th>Неделя</th></tr>
+      <tr><td>Юрист, ремонт</td><td class="num">20 000 ₽</td><td class="num">6 000 ₽</td></tr>
+      <tr><td>Клининг, репетитор, остальные</td><td class="num">12–15 000 ₽</td><td class="num">5 000 ₽</td></tr>
+    </table>
+  </div>
+  <p style="margin-top:12px">Предоплата, автопродления нет. Поштучно заявки не продаём. Клиентам говорим «мониторинг публичных сообщений», а не «продаём контакты».</p>
+</section>
+
+<section id="bot">
+  <h2>Что нового в v33</h2>
+  <div class="compare">
+    <div class="was">
+      <h3>Было (v3)</h3>
+      <ul>
+        <li>Заявки падают в группу категории</li>
+        <li>Ты руками пересылаешь их клиентам</li>
+        <li>Нигде не считается, сколько заявок было</li>
+        <li>Показать новому клиенту можно только скриншоты</li>
+      </ul>
+    </div>
+    <div class="now">
+      <h3>Стало (v33)</h3>
+      <ul>
+        <li>Бот сам шлёт заявку в закрытый канал ниши</li>
+        <li>Каждая заявка пишется в журнал</li>
+        <li>Тизер заявки уходит в открытую витрину</li>
+        <li>По понедельникам в канал приходит сводка за неделю</li>
+      </ul>
+    </div>
+  </div>
+  <h3 style="margin-top:24px">Витрина</h3>
+  <p>Открытый канал на нишу, например «Заявки на клининг · Москва». Туда приходит каждая заявка, но без ссылки на источник и без контактов: телефоны, @юзернеймы, почта и ссылки заменяются на 🔒, текст обрезается до 200 символов. Ссылку на витрину мы шлём в холодных сообщениях, чтобы человек сам увидел поток заявок.</p>
+  <h3>Недельная сводка</h3>
+  <p>Каждый понедельник в 10:00 по времени сервера бот пишет в канал клиента: «Итоги недели: 34 заявки, из них горячих — 12». Если заявок за неделю не было, сводка не приходит.</p>
+  <h3>Новая кнопка в админке</h3>
+  <p>В карточке категории появилась кнопка <b>🪟 Витрина</b>. В неё вводишь id открытого канала, «-» отключает витрину. Остальное в админке работает как раньше.</p>
+  <div class="note ok"><b>Журнал без персональных данных</b>В журнал попадают только текст заявки (уже без контактов), ниша, «температура» и ссылка на исходное сообщение. Автор не сохраняется.</div>
+</section>
+
+<section id="launch">
+  <h2>Запуск по шагам</h2>
+  <p class="progress" id="progress" aria-live="polite">Отмечено: 0 из 9</p>
+  <ol class="steps" id="steps">
+    <li><label><input type="checkbox" id="s1"><span><b>Сделать копию боевой базы.</b><span class="sub">Команды в разделе <a href="#deploy">«Деплой v33»</a>, шаг 2. При первом запуске v33 сам добавит таблицу журнала и колонку витрины, но копия должна быть.</span></span></label></li>
+    <li><label><input type="checkbox" id="s2"><span><b>Выкатить новую версию v33 на сервер.</b><span class="sub">По разделу <a href="#deploy">«Деплой v33»</a>. Два monitor.py с одной Telegram-сессией одновременно запускать нельзя: Telegram разлогинит оба.</span></span></label></li>
+    <li><label><input type="checkbox" id="s3"><span><b>Создать закрытые каналы клиентов</b> по каждой из 5 ниш, например «Клининг · Москва · клиенты».<span class="sub">Добавить в каждый бота-классификатор (lead_detector) администратором с правом публикации.</span></span></label></li>
+    <li><label><input type="checkbox" id="s4"><span><b>Прописать id закрытых каналов</b> в админке: категория → 📺 Target канал.<span class="sub">id канала выглядит как <code>-1001234567890</code>. Узнать его проще всего в веб-версии Telegram: откройте канал, число после <code>#</code> в адресе.</span></span></label></li>
+    <li><label><input type="checkbox" id="s5"><span><b>Создать открытые каналы-витрины</b> по тем же нишам, добавить туда того же бота администратором.</span></label></li>
+    <li><label><input type="checkbox" id="s6"><span><b>Прописать витрины</b> в админке: категория → 🪟 Витрина.</span></label></li>
+    <li><label><input type="checkbox" id="s7"><span><b>Проверить на одной нише.</b><span class="sub">Дождаться заявки: она должна прийти в закрытый канал целиком с кнопками, а в витрину коротко и с 🔒 вместо контактов.</span></span></label></li>
+    <li><label><input type="checkbox" id="s8"><span><b>Перевести текущих 4 клиентов</b> в закрытые каналы их ниш и предупредить их, что заявки теперь приходят туда.</span></label></li>
+    <li><label><input type="checkbox" id="s9"><span><b>Перестать пересылать руками.</b><span class="sub">Если в каналы идёт мусор, правим промпт или минус-слова категории, но ручную пересылку не возвращаем.</span></span></label></li>
+  </ol>
+</section>
+
+<section id="deploy">
+  <h2>Деплой v33</h2>
+  <p>Нужны SSH-доступ под пользователем <code>deploy</code> и sudo. Вместо <code>&lt;сервер&gt;</code> и <code>&lt;ключ&gt;</code> подставь адрес и ключ, которыми заходишь на сервер с ботами. Простой ботов при переключении — десятки секунд.</p>
+
+  <h3>1. На своём компьютере: тесты и выкладка кода</h3>
+  <div class="code"><button type="button" class="copy">Копировать</button><pre><code>cd tg_spy_bot_v33
+venv/bin/python -m pytest tests/ -q        # должно быть «191 passed»
+git status --short                         # пусто: всё закоммичено
+git rev-parse --short HEAD &gt; DEPLOYED_REV
+
+rsync -az \
+  --exclude venv/ --exclude .git/ --exclude __pycache__/ \
+  --exclude .env --exclude '*.session*' --exclude '*.db' \
+  --exclude data/ --exclude logs/ --exclude dedup_cache.pickle \
+  -e "ssh -i &lt;ключ&gt;" ./ deploy@&lt;сервер&gt;:bots/tg_spy_bot_v33/</code></pre></div>
+  <p>Исключения важны: <code>.env</code>, файлы сессии, базы и логи на сервере свои, rsync их не трогает. Файлы, которых нет локально, на сервере тоже остаются. Новых зависимостей нет, <code>pip install</code> не нужен.</p>
+
+  <h3>2. На сервере: копия базы</h3>
+  <div class="code"><button type="button" class="copy">Копировать</button><pre><code>ssh -i &lt;ключ&gt; deploy@&lt;сервер&gt;
+cd ~/bots/tg_spy_bot_v33
+cat DEPLOYED_REV                       # тот же хеш, что локально
+DB=$(grep '^DB_PATH=' .env | cut -d= -f2); echo "$DB"
+cp "$DB" "$DB.bak-$(date +%F)"</code></pre></div>
+
+  <h3>3. Узнать, что сейчас запущено</h3>
+  <div class="code"><button type="button" class="copy">Копировать</button><pre><code>systemctl is-active monitor_v3 monitor_v33</code></pre></div>
+  <p>Дальше один из двух вариантов.</p>
+
+  <div class="compare stack">
+    <div class="now">
+      <h3>А. Уже работает v33</h3>
+      <p>(<code>monitor_v33</code> — active). monitor.py в этой версии не менялся, сессию не трогаем: перезапускаем только два бота.</p>
+      <div class="code"><button type="button" class="copy">Копировать</button><pre><code>sudo systemctl restart \
+  lead_detector_bot_v33 admin_bot_v33</code></pre></div>
+    </div>
+    <div class="was" style="color:var(--ink)">
+      <h3>Б. Ещё работает v3</h3>
+      <p>(<code>monitor_v3</code> — active). Строго по порядку: сначала остановить v3, потом сессия, потом старт v33.</p>
+      <div class="code"><button type="button" class="copy">Копировать</button><pre><code>sudo systemctl disable --now monitor_v3 \
+  lead_detector_bot_v3 admin_bot_v3 watchdog_v3.timer
+systemctl is-active monitor_v3   # inactive
+
+cp ~/bots/tg_spy_bot_v3/*.session ~/bots/tg_spy_bot_v33/
+cp -n ~/bots/tg_spy_bot_v3/dedup_cache.pickle \
+  ~/bots/tg_spy_bot_v33/ 2&gt;/dev/null || true
+
+sudo cp ~/bots/tg_spy_bot_v33/services/*_v33.* \
+  /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable --now monitor_v33 \
+  lead_detector_bot_v33 admin_bot_v33 watchdog_v33.timer</code></pre></div>
+    </div>
+  </div>
+
+  <h3 style="margin-top:20px">4. Проверка</h3>
+  <div class="code"><button type="button" class="copy">Копировать</button><pre><code>systemctl is-active monitor_v33 lead_detector_bot_v33 admin_bot_v33 watchdog_v33.timer
+tail -n 20 ~/bots/tg_spy_bot_v33/logs/lead_detector_bot.log
+
+# через час-другой: в журнале появились заявки
+sqlite3 "$DB" "select category, count(*) from leads group by category"</code></pre></div>
+  <p>Все четыре юнита должны быть <code>active</code>, в логе без ошибок <code>Traceback</code>. После того как пропишешь витрину, в логе появятся строки «Тизер отправлен в витрину».</p>
+
+  <h3>5. Откат</h3>
+  <div class="code"><button type="button" class="copy">Копировать</button><pre><code>sudo systemctl disable --now monitor_v33 lead_detector_bot_v33 admin_bot_v33 watchdog_v33.timer
+sudo systemctl enable --now monitor_v3 lead_detector_bot_v3 admin_bot_v3 watchdog_v3.timer</code></pre></div>
+  <div class="note warn"><b>Никогда не запускать два монитора</b>monitor_v3 и monitor_v33 на одной сессии одновременно — Telegram разлогинит оба и сессию придётся создавать заново. Юниты v33 сами останавливают v3 (<code>Conflicts=</code>), но порядок всё равно соблюдаем.</div>
+</section>
+
+<section id="clients">
+  <h2>Подключение клиента</h2>
+  <p>Клиентов ищу я, ты их подключаешь. Порядок такой:</p>
+  <ol class="steps">
+    <li><b>Проверить место.</b> Вкладка «Ниши и места» в таблице: если в нише «Свободно» 0, клиента ставим в лист ожидания (пишем в комментарии в «Воронке»).</li>
+    <li><b>Пробный доступ, 3 дня.</b> Добавить в закрытый канал ниши, поставить дату в колонку «Пробный с». Приветствие: «Добро пожаловать! 3 дня полного доступа. Пишите людям сразу: кто первый, того и заказ».</li>
+    <li><b>День 3: звонок.</b> «Сколько написали, сколько ответили, взяли что-то?» Взял заказ — предлагаем месяц. Заявки нравятся, но заказа нет — неделю.</li>
+    <li><b>Оплата.</b> Поставить дату в «Оплата», выбрать тариф и сумму. «Оплачено до» посчитается само.</li>
+    <li><b>Отказ.</b> Удалить из канала, выбрать причину в «Отказ — причина». Причины — это данные: «мало заявок» и «не те заявки» значат, что чинить надо нам.</li>
+  </ol>
+  <div class="note warn"><b>Не больше трёх</b>Четвёртого человека в канал ниши не добавляем, даже на пробный доступ. Пробный доступ занимает место, пока он идёт.</div>
+</section>
+
+<section id="sheet">
+  <h2>Google-таблица воронки</h2>
+  <p>Файл <code>sales_funnel.xlsx</code>. Открыть в Google Таблицах: Файл → Импортировать → Загрузить → «Заменить таблицу». Формулы, выпадающие списки и цвета сохранятся. Таблица общая: я веду контакты, ты пробные доступы, оплаты и отказы.</p>
+  <h3>С чего начать</h3>
+  <ol class="steps">
+    <li>Удалить серую строку-пример во вкладке «Воронка».</li>
+    <li>Внести 4 текущих клиентов: площадка «Знакомые», дата оплаты, тариф, сумма. После этого «Ниши и места» покажет, сколько мест свободно.</li>
+    <li>Проверить цены и число мест во вкладке «Ниши и места» (жёлтые ячейки).</li>
+  </ol>
+  <h3 style="margin-top:20px">Главное правило</h3>
+  <p>В колонки этапов ставится <b>дата</b>, когда человек до этапа дошёл: Ответил → Смотрит витрину → Созвон → Пробный с → Оплата. Статус считается по ним сам, руками его не трогать. Этапы можно пропускать: если клиент пришёл от знакомых, сразу ставим дату оплаты.</p>
+  <h3>Цвета статусов</h3>
+  <div class="pills" role="list">
+    <span class="pill p-sent" role="listitem">Написали</span>
+    <span class="pill p-sent" role="listitem">Ответил</span>
+    <span class="pill p-view" role="listitem">Витрина</span>
+    <span class="pill p-call" role="listitem">Созвон</span>
+    <span class="pill p-trial" role="listitem">Пробный</span>
+    <span class="pill p-client" role="listitem">Клиент</span>
+    <span class="pill p-renew" role="listitem">Продлить</span>
+    <span class="pill p-no" role="listitem">Отказ</span>
+  </div>
+  <p style="margin-top:12px">«Продлить» значит, что оплаченный срок кончился. Пишем клиенту, после оплаты обновляем дату в «Оплата». Красная «Дата шага» значит, что подошёл срок следующего действия.</p>
+  <h3 style="margin-top:20px">Кто что заполняет</h3>
+  <div class="table-wrap">
+    <table>
+      <tr><th>Колонки</th><th>Кто</th></tr>
+      <tr><td>Дата контакта, имя, ниша, площадка, ссылка, Telegram, вариант сообщения, Ответил, Смотрит витрину, Созвон</td><td>я</td></tr>
+      <tr><td>Пробный с, Оплата, Тариф, Сумма, Отказ — причина</td><td>ты</td></tr>
+      <tr><td>Следующий шаг, Дата шага, Комментарий</td><td>тот, кто ведёт человека сейчас</td></tr>
+      <tr><td>Статус, Оплачено до, вкладки «Сводка» и «Ниши и места»</td><td>формулы, не трогать</td></tr>
+    </table>
+  </div>
+</section>
+
+<section id="rhythm">
+  <h2>Как выглядит неделя</h2>
+  <div class="week">
+    <div>Каждый день</div><div>Пролистать витрины и группу «неотбор»: нет ли мусора в каналах и не теряются ли хорошие заявки. Проверить красные «Дата шага».</div>
+    <div>Понедельник</div><div>В каналы пришли сводки. Вместе смотрим «Сводку» в таблице: сколько контактов за неделю (цель 40), конверсии, причины отказов, свободные места.</div>
+    <div>По событию</div><div>Пробный доступ закончился → звонок. Срок оплаты вышел → напомнить и обновить дату. Освободилось место → написать первому из листа ожидания.</div>
+    <div>Раз в месяц</div><div>Спросить каждого клиента, сколько заказов он закрыл с наших заявок. Ответы записываем в комментарий, из них соберём кейсы для продаж.</div>
+  </div>
+</section>
+
+<section id="faq">
+  <h2>Если что-то не так</h2>
+  <details><summary>Заявка не пришла в закрытый канал</summary><p>Проверить, что бот-классификатор — администратор канала, а id в «📺 Target канал» правильный и начинается с -100. Если заявка ушла в «неотбор», значит её отклонил ИИ: правим промпт категории.</p></details>
+  <details><summary>В закрытый канал приходит, в витрину нет</summary><p>Бот не администратор витрины или id в «🪟 Витрина» неверный. Доставку клиенту это не ломает, ошибка просто пишется в лог.</p></details>
+  <details><summary>В витрине проскочил контакт</summary><p>Маскировка ловит телефоны, @юзернеймы, почту и ссылки. Если пролезло что-то иное, пришли мне пример: допишем правило. Пока можно удалить пост из витрины руками.</p></details>
+  <details><summary>Сводка в понедельник не пришла</summary><p>За 7 дней в канал не пришло ни одной заявки, или бот не запущен. Время сводки — 10:00 по часам сервера.</p></details>
+  <details><summary>Клиент просит эксклюзив</summary><p>Пока не продаём. Предлагаем лист ожидания или занять все свободные места в нише — обсуждаем со мной.</p></details>
+  <details><summary>В таблице конверсия выглядит странно</summary><p>Чаще всего в колонку этапа вписан текст вместо даты. Там должна быть только дата.</p></details>
+</section>
+</main>
+</div>
+<script>
+(function () {
+  var boxes = Array.prototype.slice.call(document.querySelectorAll('#steps input[type="checkbox"]'));
+  var out = document.getElementById('progress');
+  var KEY = 'v33-launch-steps';
+  var saved = {};
+  try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch (e) { saved = {}; }
+  function render() {
+    var n = boxes.filter(function (b) { return b.checked; }).length;
+    out.textContent = 'Отмечено: ' + n + ' из ' + boxes.length;
+  }
+  boxes.forEach(function (b) {
+    if (saved[b.id]) b.checked = true;
+    b.addEventListener('change', function () {
+      saved[b.id] = b.checked;
+      try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {}
+      render();
+    });
+  });
+  render();
+
+  document.querySelectorAll('.code .copy').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var text = btn.parentNode.querySelector('code').textContent;
+      var done = function (label) { btn.textContent = label; setTimeout(function () { btn.textContent = 'Копировать'; }, 1500); };
+      try {
+        navigator.clipboard.writeText(text).then(function () { done('Скопировано'); }, function () { done('Выделите вручную'); });
+      } catch (e) { done('Выделите вручную'); }
+    });
+  });
+})();
+</script>
+</body>
+</html>
