@@ -251,7 +251,7 @@ mark { background: var(--warn-soft); color: var(--warn); padding: 0 1px; border-
   <h3>1. На своём компьютере: тесты и выкладка кода</h3>
   <div class="code"><button type="button" class="copy">Копировать</button><pre><code>cd tg_spy_bot_v33
 venv/bin/python -m pytest tests/ -q        # должно быть «192 passed»
-git status --short                         # пусто: всё закоммичено
+git status --short -- '*.py'               # пусто: код закоммичен
 git rev-parse --short HEAD &gt; DEPLOYED_REV
 
 rsync -az \
