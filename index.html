@@ -123,6 +123,22 @@ details p { margin: 8px 0 0; color: var(--muted); }
 .copy-msg:hover, .copy-msg.done { background: var(--accent); color: var(--surface); }
 .msg-text { white-space: pre-line; margin: 0; font-size: 16px; }
 mark { background: var(--warn-soft); color: var(--warn); padding: 0 1px; border-radius: 3px; font-weight: 600; }
+.tg-compare { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; }
+.tg { margin: 0; display: flex; flex-direction: column; gap: 6px; }
+.tg figcaption { font-size: 13px; font-weight: 600; color: var(--muted); }
+.bubble { background: var(--surface); border: 1px solid var(--line); border-radius: 14px 14px 14px 4px; padding: 12px 14px; font-size: 15px; line-height: 1.5; }
+.bubble .dim { color: var(--muted); }
+.tg-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.tg-buttons span { text-align: center; font-size: 14px; padding: 7px; border-radius: 8px; background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.plans { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.plan { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; display: flex; flex-direction: column; gap: 2px; }
+.plan.main { border: 2px solid var(--accent); }
+.plan-name { font-weight: 600; color: var(--muted); font-size: 14px; }
+.plan-price { font-family: var(--font-display); font-weight: 500; font-size: 24px; font-variant-numeric: tabular-nums; }
+.plan-term { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+.plan p { font-size: 15px; margin: 0; }
+.rules { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; }
+@media (max-width: 640px) { .tg-compare, .plans { grid-template-columns: 1fr; } }
 .progress { font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; }
 @media (max-width: 860px) {
   .wrap { grid-template-columns: 1fr; gap: 24px; }
@@ -146,6 +162,7 @@ mark { background: var(--warn-soft); color: var(--warn); padding: 0 1px; border-
     <li><a href="#launch">Запуск по шагам</a></li>
     <li><a href="#deploy">Деплой v33</a></li>
     <li><a href="#clients">Подключение клиента</a></li>
+    <li><a href="#offer">Витрина и тарифы</a></li>
     <li><a href="#messages">Холодные сообщения</a></li>
     <li><a href="#sheet">Google-таблица</a></li>
     <li><a href="#rhythm">Неделя</a></li>
@@ -172,8 +189,8 @@ mark { background: var(--warn-soft); color: var(--warn); padding: 0 1px; border-
   <div class="table-wrap">
     <table>
       <tr><th>Ниша</th><th>Месяц</th><th>Неделя</th></tr>
-      <tr><td>Юрист, ремонт</td><td class="num">20 000 ₽</td><td class="num">6 000 ₽</td></tr>
-      <tr><td>Клининг, репетитор, остальные</td><td class="num">12–15 000 ₽</td><td class="num">5 000 ₽</td></tr>
+      <tr><td>Юрист, ремонт</td><td class="num">20&nbsp;000&nbsp;₽</td><td class="num">6&nbsp;000&nbsp;₽</td></tr>
+      <tr><td>Клининг, репетитор, остальные</td><td class="num">12–15&nbsp;000&nbsp;₽</td><td class="num">5&nbsp;000&nbsp;₽</td></tr>
     </table>
   </div>
   <p style="margin-top:12px">Предоплата, автопродления нет. Поштучно заявки не продаём. Клиентам говорим «мониторинг публичных сообщений», а не «продаём контакты».</p>
@@ -308,6 +325,81 @@ sudo systemctl enable --now monitor_v3 lead_detector_bot_v3 admin_bot_v3 watchdo
   <div class="note warn"><b>Не больше трёх</b>Четвёртого человека в канал ниши не добавляем, даже на пробный доступ. Пробный доступ занимает место, пока он идёт.</div>
 </section>
 
+<section id="offer">
+  <h2>Витрина и тарифы для клиентов</h2>
+  <p>Что клиент видит до оплаты и после, сколько это стоит и на каких условиях. Отсюда же берём тексты для каналов и переписки.</p>
+
+  <h3 style="margin-top:20px">Одна заявка в двух каналах</h3>
+  <div class="tg-compare">
+    <figure class="tg">
+      <figcaption>Витрина · открытая, для всех</figcaption>
+      <div class="bubble">
+        <b>🔥 Горячий лид | Клининг</b><br>
+        Нужна генеральная уборка двушки после ремонта, Хорошёво-Мнёвники, на субботу. Окна тоже. Пишите 🔒 или 🔒<br><br>
+        <i class="dim">🔒 Контакт и ссылка на источник — у подписчиков канала.</i>
+      </div>
+    </figure>
+    <figure class="tg">
+      <figcaption>Закрытый канал · максимум 3 подписчика</figcaption>
+      <div class="bubble">
+        <b>🔥 Горячий лид | Категория: Клининг</b><br>
+        ━━━━━━━━━━━━━━━━━━━━━━━<br>
+        Нужна генеральная уборка двушки после ремонта, Хорошёво-Мнёвники, на субботу. Окна тоже. Пишите в личку или +7 9•• •••-••-••, Анна
+      </div>
+      <div class="tg-buttons"><span>✉️ Написать автору</span><span>🔗 К сообщению</span></div>
+    </figure>
+  </div>
+  <p class="pane-note" style="margin-top:8px">Текст заявки выдуман для примера. Метки бывают: 🔥 Горячий, ♨️ Тёплый, ❄️ Холодный, ❓ Требует проверки.</p>
+
+  <h3 style="margin-top:24px">Тарифы</h3>
+  <div class="plans">
+    <div class="plan">
+      <div class="plan-name">Пробный</div>
+      <div class="plan-price">0 ₽</div>
+      <div class="plan-term">3 дня</div>
+      <p>Полный доступ после созвона. Занимает одно из трёх мест.</p>
+    </div>
+    <div class="plan main">
+      <div class="plan-name">Месяц</div>
+      <div class="plan-price">12–20 тыс. ₽</div>
+      <div class="plan-term">основной тариф</div>
+      <p>Юрист и ремонт — 20&nbsp;000&nbsp;₽. Клининг — 15&nbsp;000&nbsp;₽. Репетитор и остальные — 12&nbsp;000&nbsp;₽.</p>
+    </div>
+    <div class="plan">
+      <div class="plan-name">Неделя</div>
+      <div class="plan-price">5–6 тыс. ₽</div>
+      <div class="plan-term">попробовать за деньги</div>
+      <p>Юрист и ремонт — 6&nbsp;000&nbsp;₽, остальные — 5&nbsp;000&nbsp;₽. В пересчёте дороже месяца.</p>
+    </div>
+  </div>
+  <h3 style="margin-top:20px">Условия, которые говорим каждому</h3>
+  <ul class="rules">
+    <li><b>Максимум 3 исполнителя в нише.</b> Четвёртому — лист ожидания, напишем первым, когда место освободится.</li>
+    <li><b>Предоплата, автопродления нет.</b> Не продлил — доступ закрывается, место уходит следующему.</li>
+    <li><b>Заявки не эксклюзивные.</b> Одну заявку видят все подписчики канала, кто первый написал, того и заказ. Эксклюзив пока не продаём.</li>
+    <li><b>Каждый понедельник</b> в канал приходит сводка: сколько заявок за неделю.</li>
+    <li><b>Сделки не обещаем.</b> Даём поток запросов, договаривается клиент сам.</li>
+    <li><b>Скидок и «последней цены» нет.</b> Вместо скидки — пробные 3 дня или неделя.</li>
+  </ul>
+
+  <h3 style="margin-top:24px">Тексты для каналов и переписки</h3>
+  <p class="pane-note">Подставить нишу, цену и контакт. Ниже — пример для клининга.</p>
+  <div class="msgs"><article class="msg"><header><span class="tag">Витрина</span><span class="where">Описание канала-витрины (до 255 символов)</span><button type="button" class="copy-msg">Копировать</button></header><p class="msg-text">Заявки на <mark>[клининг]</mark> из Telegram-чатов Москвы в реальном времени. Здесь — текст запроса. Контакт и ссылка на источник — в закрытом канале, максимум 3 исполнителя. Подключиться: <mark>[@ваш_контакт]</mark></p></article><article class="msg"><header><span class="tag">Витрина</span><span class="where">Закреплённый пост витрины</span><button type="button" class="copy-msg">Копировать</button></header><p class="msg-text">Что это за канал
+
+Мы отбираем в московских Telegram-чатах сообщения, где люди сами ищут <mark>[клининг]</mark>: чаты ЖК, районов, соседей. Рекламу и самих исполнителей отсекаем.
+
+Здесь видно каждую заявку, но без ссылки на автора — телефоны и юзернеймы скрыты 🔒.
+
+В закрытом канале — та же заявка целиком и кнопка «Написать автору». Мест в канале 3, сейчас свободно: <mark>[1]</mark>.
+
+Стоимость: <mark>[15 000]</mark> ₽ в месяц или <mark>[5 000]</mark> ₽ в неделю. Перед оплатой — 3 дня бесплатно.
+Написать: <mark>[@ваш_контакт]</mark></p></article><article class="msg"><header><span class="tag">Канал</span><span class="where">Описание закрытого канала клиентов</span><button type="button" class="copy-msg">Копировать</button></header><p class="msg-text">Заявки на <mark>[клининг]</mark> · Москва. Канал для подписчиков, максимум 3 исполнителя. Пишите автору сразу — кто первый, того и заказ. Вопросы: <mark>[@ваш_контакт]</mark></p></article><article class="msg"><header><span class="tag">Пробный</span><span class="where">Приветствие на пробный доступ</span><button type="button" class="copy-msg">Копировать</button></header><p class="msg-text"><mark>[Имя]</mark>, добро пожаловать! Открыл вам 3 дня полного доступа — до <mark>[дата]</mark>.
+Заявки приходят сюда сразу, как их находит бот. Пишите автору как можно быстрее: кто первый, того и заказ. Включите уведомления канала.
+Если приходит не по вашей специализации — напишите мне, поправим.</p></article><article class="msg"><header><span class="tag">Оплата</span><span class="where">Предложение после пробного доступа</span><button type="button" class="copy-msg">Копировать</button></header><p class="msg-text"><mark>[Имя]</mark>, пробные 3 дня закончились. За это время в канал пришло <mark>[N]</mark> заявок.
+Продолжаем? Месяц — <mark>[15 000]</mark> ₽, неделя — <mark>[5 000]</mark> ₽. Оплата: <mark>[способ оплаты]</mark>. После оплаты доступ сохраняется до <mark>[дата]</mark>.</p></article><article class="msg"><header><span class="tag">Продление</span><span class="where">Напоминание за 2 дня до конца оплаты</span><button type="button" class="copy-msg">Копировать</button></header><p class="msg-text"><mark>[Имя]</mark>, напоминаю: доступ к каналу оплачен до <mark>[дата]</mark>. За прошлую неделю было <mark>[N]</mark> заявок.
+Продлеваем на месяц за <mark>[15 000]</mark> ₽? Если нет — просто скажите, место отдадим следующему из листа ожидания.</p></article><article class="msg"><header><span class="tag">Ожидание</span><span class="where">Место освободилось</span><button type="button" class="copy-msg">Копировать</button></header><p class="msg-text"><mark>[Имя]</mark>, здравствуйте! Вы просили написать, когда освободится место в канале заявок на <mark>[клининг]</mark>. Место есть. Открыть вам 3 дня бесплатно, чтобы посмотрели?</p></article></div>
+</section>
+
 <section id="messages">
   <h2>Холодные сообщения</h2>
   <p>Выбери нишу, нажми «Копировать», замени выделенное. <mark>[N]</mark> — число заявок ниши за прошлую неделю из сводки в канале, <mark>[пример]</mark> — одна строка реальной заявки из витрины. Пока цифр нет, бери вариант B.</p>
@@ -322,28 +414,28 @@ sudo systemctl enable --now monitor_v3 lead_detector_bot_v3 admin_bot_v3 watchdo
   </div>
   <div class="note warn" style="margin-top:12px"><b>Не больше 10 в час, 30–50 в неделю</b>Каждое сообщение правим руками под объявление. Одинаковый текст площадки считают спамом и банят аккаунт. Отказался — больше не пишем. Вариант (A, B, TG) и площадку отмечаем в таблице воронки.</div>
   <div class="chips" role="tablist" aria-label="Ниша"><button type="button" class="chip" role="tab" id="tab-lawyer" aria-controls="pane-lawyer" aria-selected="true" data-pane="lawyer">Юрист</button><button type="button" class="chip" role="tab" id="tab-repair" aria-controls="pane-repair" aria-selected="false" data-pane="repair">Ремонт</button><button type="button" class="chip" role="tab" id="tab-cleaning" aria-controls="pane-cleaning" aria-selected="false" data-pane="cleaning">Клининг</button><button type="button" class="chip" role="tab" id="tab-tutor" aria-controls="pane-tutor" aria-selected="false" data-pane="tutor">Репетитор</button><button type="button" class="chip" role="tab" id="tab-home" aria-controls="pane-home" aria-selected="false" data-pane="home">Мастера по дому</button><button type="button" class="chip" role="tab" id="tab-moving" aria-controls="pane-moving" aria-selected="false" data-pane="moving">Переезд</button></div>
-  <div class="pane" role="tabpanel" id="pane-lawyer" aria-labelledby="tab-lawyer"><p class="pane-note">20 000 ₽/мес · частные юристы и мини-фирмы: семейное, жилищное, наследство, банкротство, ДТП</p><div class="msgs"><article class="msg"><header><span class="tag">A</span><span class="where">Авито · Яндекс Услуги</span><button type="button" class="copy-msg">Копировать</button></header><p class="msg-text"><mark>[Имя]</mark>, здравствуйте! Увидел ваше объявление по <mark>[семейным делам]</mark>.
+  <div class="pane" role="tabpanel" id="pane-lawyer" aria-labelledby="tab-lawyer"><p class="pane-note">20&nbsp;000&nbsp;₽/мес · частные юристы и мини-фирмы: семейное, жилищное, наследство, банкротство, ДТП</p><div class="msgs"><article class="msg"><header><span class="tag">A</span><span class="where">Авито · Яндекс Услуги</span><button type="button" class="copy-msg">Копировать</button></header><p class="msg-text"><mark>[Имя]</mark>, здравствуйте! Увидел ваше объявление по <mark>[семейным делам]</mark>.
 Мы отбираем запросы из московских Telegram-чатов, где люди сами ищут юриста. Например, вчера: «<mark>[пример]</mark>». За прошлую неделю таких было <mark>[N]</mark>.
 Показать, как выглядит этот поток?</p></article><article class="msg"><header><span class="tag">B</span><span class="where">Авито · Яндекс Услуги, пока нет цифры</span><button type="button" class="copy-msg">Копировать</button></header><p class="msg-text"><mark>[Имя]</mark>, добрый день! Подскажите, откуда у вас сейчас больше клиентов — сарафан, Авито, сайт?
 Спрашиваю, потому что у нас есть поток запросов «ищу юриста» из Telegram-чатов Москвы, и в канале юристов есть свободное место (их всего 3). Если интересно — покажу.</p></article><article class="msg"><header><span class="tag">TG</span><span class="where">Telegram · 2ГИС</span><button type="button" class="copy-msg">Копировать</button></header><p class="msg-text"><mark>[Имя]</mark>, здравствуйте. Нашёл вашу практику в 2ГИС.
 Каждый день в чатах московских ЖК и районов люди пишут «нужен юрист по <mark>[разделу имущества / наследству]</mark>». Мы собираем такие запросы в закрытый канал на 3 юристов — заявку видите вы и максимум ещё двое, а не тридцать откликнувшихся.
-Посмотреть поток вживую, без регистрации: <mark>[витрина]</mark></p></article></div></div><div class="pane" role="tabpanel" id="pane-repair" aria-labelledby="tab-repair" hidden><p class="pane-note">20 000 ₽/мес · бригады, прорабы, частные мастера: под ключ, санузлы, отделка</p><div class="msgs"><article class="msg"><header><span class="tag">A</span><span class="where">Авито · Яндекс Услуги</span><button type="button" class="copy-msg">Копировать</button></header><p class="msg-text"><mark>[Имя]</mark>, здравствуйте! Увидел объявление про <mark>[ремонт санузлов]</mark> в <mark>[районе]</mark>.
+Посмотреть поток вживую, без регистрации: <mark>[витрина]</mark></p></article></div></div><div class="pane" role="tabpanel" id="pane-repair" aria-labelledby="tab-repair" hidden><p class="pane-note">20&nbsp;000&nbsp;₽/мес · бригады, прорабы, частные мастера: под ключ, санузлы, отделка</p><div class="msgs"><article class="msg"><header><span class="tag">A</span><span class="where">Авито · Яндекс Услуги</span><button type="button" class="copy-msg">Копировать</button></header><p class="msg-text"><mark>[Имя]</mark>, здравствуйте! Увидел объявление про <mark>[ремонт санузлов]</mark> в <mark>[районе]</mark>.
 Мы отбираем сообщения из Telegram-чатов новостроек Москвы, где люди ищут бригаду. Например: «<mark>[пример]</mark>». За неделю набралось <mark>[N]</mark>.
 Скинуть, где посмотреть?</p></article><article class="msg"><header><span class="tag">B</span><span class="where">Авито · Яндекс Услуги, пока нет цифры</span><button type="button" class="copy-msg">Копировать</button></header><p class="msg-text"><mark>[Имя]</mark>, добрый день! Как сейчас с объектами — загружены или ищете новые?
 Есть поток заявок на ремонт из чатов московских ЖК: новосёлы спрашивают соседей, кого позвать. Канал на 3 бригады, одно место свободно. Показать?</p></article><article class="msg"><header><span class="tag">TG</span><span class="where">Telegram · 2ГИС</span><button type="button" class="copy-msg">Копировать</button></header><p class="msg-text"><mark>[Имя]</mark>, здравствуйте. В чатах новостроек каждый день пишут «посоветуйте бригаду на ремонт под ключ», «кто делал санузел». Мы собираем эти запросы в закрытый канал на 3 исполнителей.
-Вот как это выглядит (контакты скрыты): <mark>[витрина]</mark>. Если увидите свои объекты — дам 3 дня полного доступа бесплатно.</p></article></div></div><div class="pane" role="tabpanel" id="pane-cleaning" aria-labelledby="tab-cleaning" hidden><p class="pane-note">12–15 000 ₽/мес · небольшие клининговые компании, самозанятые с командой</p><div class="msgs"><article class="msg"><header><span class="tag">A</span><span class="where">Авито · Яндекс Услуги</span><button type="button" class="copy-msg">Копировать</button></header><p class="msg-text"><mark>[Имя]</mark>, здравствуйте! Увидел ваше объявление про <mark>[уборку после ремонта]</mark>.
+Вот как это выглядит (контакты скрыты): <mark>[витрина]</mark>. Если увидите свои объекты — дам 3 дня полного доступа бесплатно.</p></article></div></div><div class="pane" role="tabpanel" id="pane-cleaning" aria-labelledby="tab-cleaning" hidden><p class="pane-note">12–15&nbsp;000&nbsp;₽/мес · небольшие клининговые компании, самозанятые с командой</p><div class="msgs"><article class="msg"><header><span class="tag">A</span><span class="where">Авито · Яндекс Услуги</span><button type="button" class="copy-msg">Копировать</button></header><p class="msg-text"><mark>[Имя]</mark>, здравствуйте! Увидел ваше объявление про <mark>[уборку после ремонта]</mark>.
 Мы собираем запросы из Telegram-чатов московских домов: «<mark>[пример]</mark>». За прошлую неделю — <mark>[N]</mark> таких.
 Интересно посмотреть?</p></article><article class="msg"><header><span class="tag">B</span><span class="where">Авито · Яндекс Услуги, пока нет цифры</span><button type="button" class="copy-msg">Копировать</button></header><p class="msg-text"><mark>[Имя]</mark>, добрый день! Подскажите, хватает сейчас заказов или есть свободные дни?
 У нас поток заявок на уборку из чатов ЖК Москвы — особенно после ремонта и перед заездом. Канал на 3 клининга. Показать, как выглядит?</p></article><article class="msg"><header><span class="tag">TG</span><span class="where">Telegram · 2ГИС</span><button type="button" class="copy-msg">Копировать</button></header><p class="msg-text"><mark>[Имя]</mark>, здравствуйте. Нашёл вас в 2ГИС.
 В чатах новостроек постоянно спрашивают «кто убирал после ремонта», «нужна генеральная к выходным». Мы отбираем такие сообщения в закрытый канал на 3 клининговые компании.
-Живой поток без контактов: <mark>[витрина]</mark></p></article></div></div><div class="pane" role="tabpanel" id="pane-tutor" aria-labelledby="tab-tutor" hidden><p class="pane-note">12 000 ₽/мес · частные репетиторы и мини-школы: ЕГЭ/ОГЭ, математика, языки</p><div class="msgs"><article class="msg"><header><span class="tag">A</span><span class="where">Авито · Профи → Telegram</span><button type="button" class="copy-msg">Копировать</button></header><p class="msg-text"><mark>[Имя]</mark>, здравствуйте! Увидел вашу анкету — <mark>[математика, ЕГЭ]</mark>.
+Живой поток без контактов: <mark>[витрина]</mark></p></article></div></div><div class="pane" role="tabpanel" id="pane-tutor" aria-labelledby="tab-tutor" hidden><p class="pane-note">12&nbsp;000&nbsp;₽/мес · частные репетиторы и мини-школы: ЕГЭ/ОГЭ, математика, языки</p><div class="msgs"><article class="msg"><header><span class="tag">A</span><span class="where">Авито · Профи → Telegram</span><button type="button" class="copy-msg">Копировать</button></header><p class="msg-text"><mark>[Имя]</mark>, здравствуйте! Увидел вашу анкету — <mark>[математика, ЕГЭ]</mark>.
 В родительских Telegram-чатах Москвы каждый день ищут репетиторов, например: «<mark>[пример]</mark>». За неделю — <mark>[N]</mark> запросов.
 Показать, как это выглядит?</p></article><article class="msg"><header><span class="tag">B</span><span class="where">Пока нет цифры</span><button type="button" class="copy-msg">Копировать</button></header><p class="msg-text"><mark>[Имя]</mark>, добрый день! Есть сейчас свободные часы под новых учеников?
 У нас поток запросов от родителей из школьных и районных чатов Москвы. Канал на 3 репетиторов по предмету. Если интересно — покажу.</p></article><article class="msg"><header><span class="tag">TG</span><span class="where">Telegram</span><button type="button" class="copy-msg">Копировать</button></header><p class="msg-text"><mark>[Имя]</mark>, здравствуйте. В родительских чатах регулярно пишут «ищем репетитора по <mark>[английскому]</mark> для 8 класса, онлайн или <mark>[район]</mark>». Мы собираем такие запросы в закрытый канал на 3 репетиторов.
-Посмотреть: <mark>[витрина]</mark></p></article></div></div><div class="pane" role="tabpanel" id="pane-home" aria-labelledby="tab-home" hidden><p class="pane-note">12–15 000 ₽/мес · электрик, сантехник, окна, кондиционеры, двери, потолки. Только если в журнале есть поток</p><div class="msgs"><article class="msg"><header><span class="tag">A</span><span class="where">Авито · Яндекс Услуги</span><button type="button" class="copy-msg">Копировать</button></header><p class="msg-text"><mark>[Имя]</mark>, здравствуйте! Увидел объявление про <mark>[монтаж кондиционеров]</mark>.
+Посмотреть: <mark>[витрина]</mark></p></article></div></div><div class="pane" role="tabpanel" id="pane-home" aria-labelledby="tab-home" hidden><p class="pane-note">12–15&nbsp;000&nbsp;₽/мес · электрик, сантехник, окна, кондиционеры, двери, потолки. Только если в журнале есть поток</p><div class="msgs"><article class="msg"><header><span class="tag">A</span><span class="where">Авито · Яндекс Услуги</span><button type="button" class="copy-msg">Копировать</button></header><p class="msg-text"><mark>[Имя]</mark>, здравствуйте! Увидел объявление про <mark>[монтаж кондиционеров]</mark>.
 Мы собираем из Telegram-чатов московских домов сообщения вроде «<mark>[пример]</mark>». За неделю таких было <mark>[N]</mark>.
 Показать?</p></article><article class="msg"><header><span class="tag">B</span><span class="where">Авито · Яндекс Услуги, пока нет цифры</span><button type="button" class="copy-msg">Копировать</button></header><p class="msg-text"><mark>[Имя]</mark>, добрый день! Как с заказами в этом месяце?
-В чатах ЖК соседи постоянно спрашивают, кого позвать на <mark>[услугу]</mark>. Мы собираем такие запросы в канал на 3 мастеров. Интересно посмотреть?</p></article></div></div><div class="pane" role="tabpanel" id="pane-moving" aria-labelledby="tab-moving" hidden><p class="pane-note">Маленький чек и демпинг — сразу предлагаем неделю за 5 000 ₽</p><div class="msgs"><article class="msg"><header><span class="tag">A</span><span class="where">Авито</span><button type="button" class="copy-msg">Копировать</button></header><p class="msg-text"><mark>[Имя]</mark>, здравствуйте! В чатах Москвы каждый день ищут «газель с грузчиками на выходные». Собираем такие запросы в канал на 3 перевозчика. Неделя доступа — 5 000 ₽, можно сначала посмотреть бесплатно. Показать?</p></article></div></div>
+В чатах ЖК соседи постоянно спрашивают, кого позвать на <mark>[услугу]</mark>. Мы собираем такие запросы в канал на 3 мастеров. Интересно посмотреть?</p></article></div></div><div class="pane" role="tabpanel" id="pane-moving" aria-labelledby="tab-moving" hidden><p class="pane-note">Маленький чек и демпинг — сразу предлагаем неделю за 5&nbsp;000&nbsp;₽</p><div class="msgs"><article class="msg"><header><span class="tag">A</span><span class="where">Авито</span><button type="button" class="copy-msg">Копировать</button></header><p class="msg-text"><mark>[Имя]</mark>, здравствуйте! В чатах Москвы каждый день ищут «газель с грузчиками на выходные». Собираем такие запросы в канал на 3 перевозчика. Неделя доступа — 5&nbsp;000&nbsp;₽, можно сначала посмотреть бесплатно. Показать?</p></article></div></div>
   <h3 style="margin-top:28px">Дожим и ответы — для всех ниш</h3>
   <div class="msgs"><article class="msg"><header><span class="tag">Дожим</span><span class="where">Через 2–3 дня, один раз</span><button type="button" class="copy-msg">Копировать</button></header><p class="msg-text"><mark>[Имя]</mark>, напомню о себе коротко: за эти дни в чатах было ещё <mark>[N]</mark> запросов по <mark>[нише]</mark>. Если неактуально — так и скажите, больше не побеспокою.</p></article><article class="msg"><header><span class="tag">«Да, покажите»</span><span class="where">Ответ</span><button type="button" class="copy-msg">Копировать</button></header><p class="msg-text">Вот открытый канал: <mark>[витрина]</mark>. Там те же заявки в реальном времени, только без ссылки на человека. Посмотрите пару дней. Если увидите своих клиентов — созвонимся на 5 минут, дам полный доступ на 3 дня бесплатно.</p></article><article class="msg"><header><span class="tag">«Сколько стоит?»</span><span class="where">Ответ</span><button type="button" class="copy-msg">Копировать</button></header><p class="msg-text"><mark>[20 000 / 12–15 000]</mark> ₽ в месяц или <mark>[6 000 / 5 000]</mark> ₽ за неделю. В канале максимум 3 исполнителя. Сначала 3 дня бесплатно, чтобы вы проверили на реальных заявках.</p></article><article class="msg"><header><span class="tag">«Откуда контакты?»</span><span class="where">Ответ</span><button type="button" class="copy-msg">Копировать</button></header><p class="msg-text">Мы не продаём контакты. Это публичные сообщения в открытых чатах — их может прочитать любой. Мы их находим и присылаем текст и ссылку на сообщение, дальше вы пишете человеку сами.</p></article><article class="msg"><header><span class="tag">«А вы кто?»</span><span class="where">Ответ</span><button type="button" class="copy-msg">Копировать</button></header><p class="msg-text"><mark>[Имя]</mark>, делаем сервис мониторинга Telegram-чатов для мастеров и юристов в Москве. Сейчас пользуются 4 человека: юрист, мастер по ремонту, клининг и репетитор.</p></article><article class="msg"><header><span class="tag">«Дорого»</span><span class="where">Ответ</span><button type="button" class="copy-msg">Копировать</button></header><p class="msg-text">Понимаю. Поэтому сначала 3 дня бесплатно: если за 3 дня не будет ни одной заявки, которая вам подходит, — просто не продлеваете.</p></article><article class="msg"><header><span class="tag">«Не пишите»</span><span class="where">Ответ, потом «Отказ» в таблице</span><button type="button" class="copy-msg">Копировать</button></header><p class="msg-text">Понял, извините за беспокойство. Хорошего дня!</p></article></div>
 </section>
