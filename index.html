@@ -129,6 +129,7 @@ mark { background: var(--warn-soft); color: var(--warn); padding: 0 1px; border-
 .bubble { background: var(--surface); border: 1px solid var(--line); border-radius: 14px 14px 14px 4px; padding: 12px 14px; font-size: 15px; line-height: 1.5; }
 .bubble .dim { color: var(--muted); }
 .tg-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.tg-buttons.one { grid-template-columns: 1fr; }
 .tg-buttons span { text-align: center; font-size: 14px; padding: 7px; border-radius: 8px; background: var(--accent-soft); color: var(--accent); font-weight: 600; }
 .plans { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
 .plan { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; display: flex; flex-direction: column; gap: 2px; }
@@ -237,7 +238,7 @@ mark { background: var(--warn-soft); color: var(--warn); padding: 0 1px; border-
     <li><label><input type="checkbox" id="s4"><span><b>Прописать id закрытых каналов</b> в админке: категория → 📺 Target канал.<span class="sub">id канала выглядит как <code>-1001234567890</code>. Узнать его проще всего в веб-версии Telegram: откройте канал, число после <code>#</code> в адресе.</span></span></label></li>
     <li><label><input type="checkbox" id="s5"><span><b>Создать открытые каналы-витрины</b> по тем же нишам, добавить туда того же бота администратором.</span></label></li>
     <li><label><input type="checkbox" id="s6"><span><b>Прописать витрины</b> в админке: категория → 🪟 Витрина.</span></label></li>
-    <li><label><input type="checkbox" id="s7"><span><b>Проверить на одной нише.</b><span class="sub">Дождаться заявки: она должна прийти в закрытый канал целиком с кнопками, а в витрину коротко и с 🔒 вместо контактов.</span></span></label></li>
+    <li><label><input type="checkbox" id="s7"><span><b>Проверить на одной нише.</b><span class="sub">Дождаться заявки: она должна прийти в закрытый канал целиком с кнопкой «К сообщению», а в витрину коротко и с 🔒 вместо контактов.</span></span></label></li>
     <li><label><input type="checkbox" id="s8"><span><b>Перевести текущих 4 клиентов</b> в закрытые каналы их ниш и предупредить их, что заявки теперь приходят туда.</span></label></li>
     <li><label><input type="checkbox" id="s9"><span><b>Перестать пересылать руками.</b><span class="sub">Если в каналы идёт мусор, правим промпт или минус-слова категории, но ручную пересылку не возвращаем.</span></span></label></li>
   </ol>
@@ -249,7 +250,7 @@ mark { background: var(--warn-soft); color: var(--warn); padding: 0 1px; border-
 
   <h3>1. На своём компьютере: тесты и выкладка кода</h3>
   <div class="code"><button type="button" class="copy">Копировать</button><pre><code>cd tg_spy_bot_v33
-venv/bin/python -m pytest tests/ -q        # должно быть «191 passed»
+venv/bin/python -m pytest tests/ -q        # должно быть «192 passed»
 git status --short                         # пусто: всё закоммичено
 git rev-parse --short HEAD &gt; DEPLOYED_REV
 
@@ -346,7 +347,7 @@ sudo systemctl enable --now monitor_v3 lead_detector_bot_v3 admin_bot_v3 watchdo
         ━━━━━━━━━━━━━━━━━━━━━━━<br>
         Нужна генеральная уборка двушки после ремонта, Хорошёво-Мнёвники, на субботу. Окна тоже. Пишите в личку или +7 9•• •••-••-••, Анна
       </div>
-      <div class="tg-buttons"><span>✉️ Написать автору</span><span>🔗 К сообщению</span></div>
+      <div class="tg-buttons one"><span>🔗 К сообщению</span></div>
     </figure>
   </div>
   <p class="pane-note" style="margin-top:8px">Текст заявки выдуман для примера. Метки бывают: 🔥 Горячий, ♨️ Тёплый, ❄️ Холодный, ❓ Требует проверки.</p>
@@ -390,7 +391,7 @@ sudo systemctl enable --now monitor_v3 lead_detector_bot_v3 admin_bot_v3 watchdo
 
 Здесь видно каждую заявку, но без ссылки на автора — телефоны и юзернеймы скрыты 🔒.
 
-В закрытом канале — та же заявка целиком и кнопка «Написать автору». Мест в канале 3, сейчас свободно: <mark>[1]</mark>.
+В закрытом канале — та же заявка целиком и кнопка «К сообщению»: открываете исходное сообщение в чате и пишете автору сами. Мест в канале 3, сейчас свободно: <mark>[1]</mark>.
 
 Стоимость: <mark>[15 000]</mark> ₽ в месяц или <mark>[5 000]</mark> ₽ в неделю. Перед оплатой — 3 дня бесплатно.
 Написать: <mark>[@ваш_контакт]</mark></p></article><article class="msg"><header><span class="tag">Канал</span><span class="where">Описание закрытого канала клиентов</span><button type="button" class="copy-msg">Копировать</button></header><p class="msg-text">Заявки на <mark>[клининг]</mark> · Москва. Канал для подписчиков, максимум 3 исполнителя. Пишите автору сразу — кто первый, того и заказ. Вопросы: <mark>[@ваш_контакт]</mark></p></article><article class="msg"><header><span class="tag">Пробный</span><span class="where">Приветствие на пробный доступ</span><button type="button" class="copy-msg">Копировать</button></header><p class="msg-text"><mark>[Имя]</mark>, добро пожаловать! Открыл вам 3 дня полного доступа — до <mark>[дата]</mark>.
